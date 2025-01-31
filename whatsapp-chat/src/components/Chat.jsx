@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import Message from './Message';
+import ContactInput from './ContactInput';
+import ContactList from './ContactList';
+import MessageList from './MessageList';
+import MessageInput from './MessageInput';
 
 const Chat = ({ credentials }) => {
+  const { idInstance, apiTokenInstance } = credentials;
+  const navigate = useNavigate();
+
   const [messages, setMessages] = useState([]);
   const [textMessage, setTextMessage] = useState('');
-  //const [recipient, setRecipient] = useState(''); // const [phoneNumber, setPhoneNumber] = useState('');
-
   const [contacts, setContacts] = useState([]);
   const [newContact, setNewContact] = useState('');
   const [currentChat, setCurrentChat] = useState(null);
-
-  const { idInstance, apiTokenInstance } = credentials;
 
   const sendMessage = async () => {
     if (!currentChat) return; // Если нет выбранного чата, не отправляем сообщение
@@ -63,43 +66,26 @@ const Chat = ({ credentials }) => {
     fetchMessages();
     const interval = setInterval(fetchMessages, 5000);
     return () => clearInterval(interval);
-  });
+  }); //[currentChat]
+
+  const handleLogout = () => {
+    navigate('/login'); // Перенаправляем на страницу логина
+};
 
   return (
     <div style={{ display: 'flex' }}>
       <div style={{ width: '30%', borderRight: '1px solid #ccc', padding: '10px' }}>
         <h3>Чаты</h3>
-        <input 
-          type="text" 
-          placeholder="Номер получателя" 
-          value={newContact} 
-          onChange={(e) => setNewContact(e.target.value)} 
-        />
-        <button onClick={addContact}>Добавить чат</button>
-        <ul>
-          {contacts.map((contact, index) => (
-            <li key={index} onClick={() => setCurrentChat(contact)} style={{ cursor: 'pointer' }}>
-              {contact}
-            </li>
-          ))}
-        </ul>
+        <ContactInput newContact={newContact} setNewContact={setNewContact} addContact={addContact} />
+        <ContactList contacts={contacts} setCurrentChat={setCurrentChat} />
+        <button onClick={handleLogout}>Выйти</button>
       </div>
       <div style={{ width: '70%', padding: '10px' }}>
         {currentChat ? (
           <>
             <h3>Чат с {currentChat}</h3>
-            <div style={{ height: '400px', overflowY: 'scroll', border: '1px solid #ccc', padding: '10px' }}>
-              {messages.map((msg, index) => (
-                <Message key={index} text={msg.text} sender={msg.sender} />
-              ))}
-            </div>
-            <input 
-              type="text" 
-              value={textMessage} 
-              onChange={(e) => setTextMessage(e.target.value)} 
-              placeholder="Ваше сообщение" 
-            />
-            <button onClick={sendMessage}>Отправить</button>
+            <MessageList messages={messages} />
+            <MessageInput textMessage={textMessage} setTextMessage={setTextMessage} sendMessage={sendMessage} />
           </>
         ) : (
             <p>Выберите чат для начала общения.</p>
