@@ -3,38 +3,15 @@ import Login from './components/Login';
 import Chat from './components/Chat';
 
 const App = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [idInstance, setIdInstance] = useState('');
-  const [apiTokenInstance, setApiTokenInstance] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-
-  const handleLogin = (id, token) => {
-    setIdInstance(id);
-    setApiTokenInstance(token);
-    setLoggedIn(true);
-  };
-
-  const handleStartChat = (number) => {
-    setPhoneNumber(number);
-  };
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [credentials, setCredentials] = useState({ idInstance: '', apiTokenInstance: '' });
 
   return (
-    <div>
-      {!loggedIn ? (
-        <Login onLogin={handleLogin} />
+    <div className='app'>
+      {!isLoggedIn ? (
+        <Login setIsLoggedIn={setIsLoggedIn} setCredentials={setCredentials} />
       ) : (
-        <div>
-          <input 
-            type="text" 
-            placeholder="Введите номер получателя" 
-            onBlur={(e) => handleStartChat(e.target.value)} 
-          />
-          <Chat 
-            idInstance={idInstance} 
-            apiTokenInstance={apiTokenInstance} 
-            phoneNumber={phoneNumber} 
-          />
-        </div>
+          <Chat credentials={credentials} />
       )}
     </div>
   );
