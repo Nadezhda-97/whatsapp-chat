@@ -1,13 +1,13 @@
-// Login.js
 import React, { useState } from 'react';
 
-const Login = ({ onLogin }) => {
+const Login = ({ setIsLoggedIn, setCredentials }) => {
   const [idInstance, setIdInstance] = useState('');
   const [apiTokenInstance, setApiTokenInstance] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onLogin(idInstance, apiTokenInstance);
+    setCredentials({ idInstance, apiTokenInstance });
+    setIsLoggedIn(true);
   };
 
   return (
