@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({ setIsLoggedIn, setCredentials }) => {
   const [idInstance, setIdInstance] = useState('');
   const [apiTokenInstance, setApiTokenInstance] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setCredentials({ idInstance, apiTokenInstance });
     setIsLoggedIn(true);
+  };
+
+  const handleLogin = () => {
+    // Здесь можно добавить логику проверки учетных данных
+    // Если вход успешен, перенаправляем на страницу чата
+    navigate('/');
   };
 
   return (
@@ -24,7 +32,7 @@ const Login = ({ setIsLoggedIn, setCredentials }) => {
         value={apiTokenInstance} 
         onChange={(e) => setApiTokenInstance(e.target.value)} 
       />
-      <button type="submit">Войти</button>
+      <button type="submit" onClick={handleLogin}>Войти</button>
     </form>
   );
 };
