@@ -2,13 +2,14 @@ import React from 'react';
 
 const ContactList = ({ contacts, setCurrentChat }) => {
   return (
-    <ul>
+    <div>
       {contacts.map((contact, index) => (
-        <li key={index} onClick={() => setCurrentChat(contact)} style={{ cursor: 'pointer' }}>
+        <div key={index} onClick={() => setCurrentChat(contact)} className="contact-item">
           {contact}
-        </li>
+        </div>
       ))}
-    </ul>
+    </div>
+    
   );
 };
 
