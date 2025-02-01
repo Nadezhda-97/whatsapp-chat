@@ -2,14 +2,17 @@ import React from 'react';
 
 const MessageInput = ({ textMessage, setTextMessage, sendMessage }) => {
   return (
-    <div>
-      <input 
-        type="text" 
-        value={textMessage} 
-        onChange={(e) => setTextMessage(e.target.value)} 
-        placeholder="Ваше сообщение" 
+    <div className="message-input">
+      <input
+        type="text"
+        value={textMessage}
+        onChange={(e) => setTextMessage(e.target.value)}
+        placeholder="Ваше сообщение"
+        className="message-input-field"
+        required
+        autoFocus
       />
-      <button onClick={sendMessage}>Отправить</button>
+      <button onClick={sendMessage} className="send-button">Отправить</button>
     </div>
   );
 };
