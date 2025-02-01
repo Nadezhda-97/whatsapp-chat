@@ -6,6 +6,7 @@ import ContactInput from './ContactInput';
 import ContactList from './ContactList';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
+import '../styles/chatStyles.css';
 
 const Chat = ({ credentials }) => {
   const { idInstance, apiTokenInstance } = credentials;
@@ -57,8 +58,8 @@ const Chat = ({ credentials }) => {
 
   const addContact = () => {
     if (newContact && !contacts.includes(newContact)) {
-        setContacts([...contacts, newContact]);
-        setNewContact('');
+      setContacts([...contacts, newContact]);
+      setNewContact('');
     }
   };
 
@@ -73,22 +74,25 @@ const Chat = ({ credentials }) => {
 };
 
   return (
-    <div style={{ display: 'flex' }}>
-      <div style={{ width: '30%', borderRight: '1px solid #ccc', padding: '10px' }}>
+    <div className="container">
+      <div className="contact-container">
         <h3>Чаты</h3>
         <ContactInput newContact={newContact} setNewContact={setNewContact} addContact={addContact} />
         <ContactList contacts={contacts} setCurrentChat={setCurrentChat} />
-        <button onClick={handleLogout}>Выйти</button>
+        <button onClick={handleLogout} className="logout-button">Выйти</button>
       </div>
-      <div style={{ width: '70%', padding: '10px' }}>
+      <div className="chat-container">
         {currentChat ? (
           <>
             <h3>Чат с {currentChat}</h3>
-            <MessageList messages={messages} />
+            <div className="message-list">
+              <MessageList messages={messages} />
+            </div>
+            
             <MessageInput textMessage={textMessage} setTextMessage={setTextMessage} sendMessage={sendMessage} />
           </>
         ) : (
-            <p>Выберите чат для начала общения.</p>
+            <p>Выберите чат для начала общения</p>
         )}
       </div>
     </div>
