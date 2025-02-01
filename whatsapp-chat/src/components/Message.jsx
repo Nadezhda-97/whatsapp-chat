@@ -1,8 +1,9 @@
 import React from 'react';
+import '../styles/chatStyles.css';
 
-function Message({ text, sender }) {
+const Message = ({ text, sender }) => {
   return (
-    <div className={sender === 'me' ? 'message-me' : 'message-other'}>
+    <div className={`message ${sender === 'me' ? 'message-me' : 'message-other'}`}>
       {text}
     </div>
   );
