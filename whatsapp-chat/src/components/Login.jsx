@@ -2,21 +2,22 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/loginStyles.css';
 
-const Login = ({ setIsLoggedIn, setCredentials }) => {
+const Login = ({ isLoggedIn, setIsLoggedIn }) => {
   const [idInstance, setIdInstance] = useState('');
   const [apiTokenInstance, setApiTokenInstance] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setCredentials({ idInstance, apiTokenInstance });
     setIsLoggedIn(true);
   };
 
   const handleLogin = () => {
-    // Здесь можно добавить логику проверки учетных данных
-    // Если вход успешен, перенаправляем на страницу чата
-    navigate('/');
+    if (idInstance && apiTokenInstance) {
+      localStorage.setItem('idInstance', idInstance);
+      localStorage.setItem('apiTokenInstance', apiTokenInstance);
+      navigate('/');
+    }
   };
 
   return (
