@@ -3,7 +3,7 @@ import Message from './Message';
 
 const MessageList = ({ messages }) => {
   return (
-    <div>
+    <div className="message-list">
       {messages.map((message, index) => (
         <Message key={index} text={message.text} sender={message.sender} />
       ))}
@@ -12,7 +12,3 @@ const MessageList = ({ messages }) => {
 };
 
 export default MessageList;
-
-/* 
-<div style={{ height: '400px', overflowY: 'scroll', padding: '10px' }}>
-*/
