@@ -9,17 +9,16 @@ const chatPath = '/';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [credentials, setCredentials] = useState({ idInstance: '', apiTokenInstance: '' });
 
   const Root = ({ children }) => {
-    return !isLoggedIn ? children : <Navigate to={chatPath} />
+    return isLoggedIn ? <Navigate to={chatPath} /> : children
   }
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={loginPath} element={<Root><Login setIsLoggedIn={setIsLoggedIn} setCredentials={setCredentials} /></Root>} />
-        <Route path={chatPath} element={<Chat credentials={credentials} />} />
+        <Route path={loginPath} element={<Root><Login setIsLoggedIn={setIsLoggedIn} /></Root>} />
+        <Route path={chatPath} element={<Chat isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
       </Routes>
     </BrowserRouter>
   );
