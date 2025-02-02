@@ -8,27 +8,31 @@ import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import '../styles/chatStyles.css';
 
-const Chat = ({ credentials }) => {
-  const { idInstance, apiTokenInstance } = credentials;
-  const navigate = useNavigate();
-
+const Chat = ({ isLoggedIn, setIsLoggedIn }) => {
   const [messages, setMessages] = useState([]);
   const [textMessage, setTextMessage] = useState('');
   const [contacts, setContacts] = useState([]);
   const [newContact, setNewContact] = useState('');
   const [currentChat, setCurrentChat] = useState(null);
+  const navigate = useNavigate();
+
+  const idInstance = localStorage.getItem('idInstance');
+  const apiTokenInstance = localStorage.getItem('apiTokenInstance');
 
   const sendMessage = async () => {
     if (!currentChat) return; // Если нет выбранного чата, не отправляем сообщение
     try {
-      await axios.post(`https://api.green-api.com/sendMessage`, {
-        idInstance,
-        apiTokenInstance,
-        recipient: currentChat,
-        message: textMessage,
-      });
+      await axios.post(`https://api.green-api.com/waInstance${idInstance}/sendMessage/${apiTokenInstance}`, {
+          chatId: `${currentChat}@c.us`, // номер аккаунта собеседника
+          message: textMessage,
+        }, {
+          headers: {
+          'Content-Type': 'application/json'
+        },
+        },
+      );
       setMessages(prevMessages => [...prevMessages, { text: textMessage, sender: 'me' }]);
-      setTextMessage(''); //setTextMessage(textMessage);
+      setTextMessage('');
     } catch(error) {
       console.error('Ошибка при отправке сообщения:', error);
     }
@@ -37,11 +41,10 @@ const Chat = ({ credentials }) => {
   const fetchMessages = async () => {
     if (!currentChat) return; // Не запрашиваем сообщения, если нет текущего чата
     try {
-      const response = await axios.get(`https://api.green-api.com/receiveMessage`, {
-        params: { idInstance, apiTokenInstance },
-      });
+      const response = await axios.get(`https://api.green-api.com/waInstance${idInstance}/receiveNotification/${apiTokenInstance}`);
 
     // Проверка на наличие новых сообщений
+    //console.log('response.data.body ->', response.data.body);
       if (response.data && response.data.length > 0) {
         const newMessages = response.data
           .filter(msg => msg.sender === currentChat) // Фильтруем сообщения по текущему чату
@@ -64,12 +67,21 @@ const Chat = ({ credentials }) => {
   };
 
   useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/login'); // Перенаправление на страницу логина, если не авторизован
+    }
+  }, [isLoggedIn, navigate]);
+
+  useEffect(() => {
     fetchMessages();
-    const interval = setInterval(fetchMessages, 5000);
-    return () => clearInterval(interval);
-  }); //[currentChat]
+    /* const interval = setInterval(fetchMessages, 5000);
+    return () => clearInterval(interval); */
+  }, [currentChat, fetchMessages]);
 
   const handleLogout = () => {
+    localStorage.removeItem('idInstance');
+    localStorage.removeItem('apiTokenInstance');
+    setIsLoggedIn(false); // Устанавливаем состояние неавторизованного пользователя
     navigate('/login'); // Перенаправляем на страницу логина
 };
 
