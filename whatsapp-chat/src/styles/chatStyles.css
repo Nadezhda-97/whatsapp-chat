@@ -76,10 +76,11 @@
 }
 
 .message-list {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
   height: 400px;
   overflow-y: auto;
-  margin-bottom: 10px;
-  /* padding: '10px'; */
   background-color: #f0f0f0;
 }
 
@@ -90,15 +91,25 @@
 }
 
 .message-me {
-  background-color: #007bff;
-  color: white;
   align-self: flex-end;
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 5px 0;
+  max-width: 60%;
+  word-wrap: break-word;
 }
 
 .message-other {
-  background-color: #e9ecef;
-  color: black;
   align-self: flex-start;
+  background-color: #e7e1e2;
+  color: black;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 5px 0;
+  max-width: 60%;
+  word-wrap: break-word;
 }
 
 .message-input {
